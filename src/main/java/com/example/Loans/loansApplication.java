@@ -30,10 +30,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 				url = "http://localhost:9000/swagger-ui.html"
 		)
 )
-public class LoansApplication {
+public class loansApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LoansApplication.class, args);
+		SpringApplication.run(loansApplication.class, args);
 	}
 
 }
