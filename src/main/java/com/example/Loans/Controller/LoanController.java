@@ -2,6 +2,7 @@ package com.example.Loans.Controller;
 
 import com.example.Loans.Contants.LoansConstants;
 import com.example.Loans.Dto.ErrorResponseDto;
+import com.example.Loans.Dto.LoansApplicationFetchingDto;
 import com.example.Loans.Dto.LoansDto;
 import com.example.Loans.Dto.ResponseDto;
 import com.example.Loans.Services.ILoanService;
@@ -14,6 +15,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,14 +24,24 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("v1/loans/")
-@AllArgsConstructor
 @Validated
 @Tag(name = "Loan Creating Controller",
         description = "This Controller gives endpoints for Creating, Updating, Fetching, Deleting a Loan"
 )
 public class LoanController {
 
-    private ILoanService loanService;
+    @Value("${build.version}")
+    private String buildVersion;
+
+    private final ILoanService loanService;
+
+    private Environment environment;
+
+    private LoansApplicationFetchingDto loansApplicationFetchingDto;
+
+    public LoanController(ILoanService loanService){
+        this.loanService = loanService;
+    }
 
     @Operation(
             description = "API for creating New Loan",
@@ -133,6 +146,97 @@ public class LoanController {
             return new ResponseEntity<>(new ResponseDto(LoansConstants.STATUS_417, LoansConstants.MESSAGE_417_DELETE), HttpStatus.EXPECTATION_FAILED);
 
         }
+    }
+
+    @Operation(
+            summary = "Get Build Info",
+            description = "Get Build info of Project deployed"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Project Version is Returned"
+
+            ),
+            @ApiResponse(
+                    responseCode = "417",
+                    description = "Exception Failed"
+
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(
+                                    implementation = ErrorResponseDto.class
+                            )
+                    )
+            )}
+    )
+    @GetMapping("/version")
+    public ResponseEntity<String> getBuildInfo(){
+        return ResponseEntity.status(HttpStatus.OK).body(buildVersion);
+    }
+
+
+    @Operation(
+            summary = "Get Environment Variable Info",
+            description = "Get Environment Variable info of Project deployed"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Environment value of Local system is returned"
+
+            ),
+            @ApiResponse(
+                    responseCode = "417",
+                    description = "Exception Failed"
+
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(
+                                    implementation = ErrorResponseDto.class
+                            )
+                    )
+            )}
+    )
+    @GetMapping("/envVariables")
+    public ResponseEntity<String> getEnvironmentDetails(){
+        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME"));
+    }
+
+    @Operation(
+            summary = "Get configuration properties from env file",
+            description = "Get you configuration properties done in application.yml file"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Environment value of Local system is returned"
+
+            ),
+            @ApiResponse(
+                    responseCode = "417",
+                    description = "Exception Failed"
+
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(
+                            schema = @Schema(
+                                    implementation = ErrorResponseDto.class
+                            )
+                    )
+            )}
+    )
+    @GetMapping("/contact-info")
+    public ResponseEntity<LoansApplicationFetchingDto> getConfigurationProperties(){
+        return ResponseEntity.status(HttpStatus.OK).body(loansApplicationFetchingDto);
     }
 
 

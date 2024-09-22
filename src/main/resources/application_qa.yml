@@ -1,0 +1,15 @@
+#spring:
+#  config:
+#    activate:
+#      on-profile: "qa"
+#
+#build:
+#  version: "1.0qa"
+#
+#loans:
+#  message: "Welcome to Loans Related QA API's"
+#  contactDetails:
+#    name: "QA"
+#    email: "qa@gmail.com"
+#  support:
+##    - (+91) 999999999

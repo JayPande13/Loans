@@ -2,6 +2,10 @@ server:
   port: 8090
 
 spring:
+  application:
+    name: "loans"
+  profiles:
+    active: "prod"
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
@@ -15,3 +19,23 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  config:
+    import: "optional:configserver:http://localhost:8071/"
+#  config:
+#    import:
+#      - "application_qa.yml"
+#      - "application_prod.yml"
+#  profiles:
+#    active:
+#        - "qa"  # enter profile you want to activate
+#
+#build:
+#  version: "1.0dev"
+#
+#loans:
+#  message: "Welcome to Loans Related local API's"
+#  contactDetails:
+#    name: "Jay Pande - Developer"
+#    email: "jmaypande@gmail.com"
+#  support:
+#      - (+91) 7351733644

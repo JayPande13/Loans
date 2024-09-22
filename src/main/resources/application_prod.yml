@@ -1,0 +1,16 @@
+#spring:
+#  config:
+#    activate:
+#      on-profile: "prod"
+#
+#
+#build:
+#  version: "1.0prod"
+#
+#loans:
+#  message: "Welcome to Account Related Prod API's"
+#  contactDetails:
+#    name: "Manager"
+#    email: "manager@gmail.com"
+#  support:
+#    - (+91) 8677463782
